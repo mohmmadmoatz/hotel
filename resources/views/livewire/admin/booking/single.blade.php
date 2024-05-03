@@ -22,6 +22,12 @@
                 </a>
             @endif
 
+            @if($booking->status !="booked")
+            <a target="_blank" href="@route('checkout')?booking_id={{$booking->id}}" class="btn text-primary mt-1">
+                    <i class="icon-printer"></i>
+                </a>
+            @endif
+
             
             @if(getCrudConfig('Booking')->delete && hasPermission(getRouteName().'.booking.delete', 0, 0, $booking))
                 <button @click.prevent="modalIsOpen = true" class="btn text-danger mt-1">

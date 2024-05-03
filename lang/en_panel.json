@@ -146,5 +146,7 @@
     "Book_date": "Book_date",
     "Room_id": "Room_id",
     "Prebook": "Prebook",
-    "Prebooks": "Prebooks"
+    "Prebooks": "Prebooks",
+    "Incomecat": "Incomecat",
+    "Incomecats": "Incomecats"
 }

@@ -14,6 +14,8 @@ class Create extends Component
     public $type;
     public $amount;
     public $date;
+
+    public $incomecat_id;
     
     protected $rules = [
         'details' => 'required',
@@ -45,7 +47,8 @@ class Create extends Component
             'type' => $this->type,
             'amount' => $this->amount,
             'date' => $this->date, 
-            'user_id' => auth()->user()->id,           
+            'user_id' => auth()->user()->id,
+            'income_cat' => $this->incomecat_id           
         ]);
 
         $this->reset();

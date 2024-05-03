@@ -31,6 +31,13 @@
                 <span class="hide-menu"> اصناف المصاريف</span>
             </a>
         </li>
+
+        <li class="sidebar-item @isActive(getRouteName().'.'.'incomecat'.'.read')">
+            <a href="@route(getRouteName().'.'.'incomecat'.'.read')"
+                class="sidebar-link @isActive(getRouteName().'.'.'room'.'.read')">
+                <span class="hide-menu"> اصناف الواردات</span>
+            </a>
+        </li>
        
 
         <li class="sidebar-item @isActive(getRouteName().'.'.'user'.'.read')">

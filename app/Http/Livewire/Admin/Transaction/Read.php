@@ -28,8 +28,39 @@ class Read extends Component
     
     public $user_id;
 
+    public $selected = [];
+
+    public $from_date;
+    public $to_date;
+
     public function transactionDeleted(){
         // Nothing ..
+    }
+
+
+    function makeReport() {
+            // save in session
+            $sid = rand(1000, 9999);
+            $data = [
+                'from_date' => $this->from_date,
+                'to_date' => $this->to_date,
+                'user_id' => $this->user_id,
+                'sid' => $sid,
+                'selected'=>$this->selected
+            ];
+            
+            // put session with name sid
+            session()->put('sid'.$sid, $data);
+            
+
+            // dispatch open in new window
+
+            $route = route('report')."?sid=".$sid;
+
+            $this->dispatchBrowserEvent('print', ['url' => $route]);
+
+
+
     }
 
     public function sort($column)

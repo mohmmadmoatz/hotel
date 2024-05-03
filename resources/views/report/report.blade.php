@@ -1,5 +1,19 @@
 @php
-$booking = \App\Models\Booking::find($_GET['booking_id']);
+
+// get from session
+
+$data = session()->get('sid'.$_GET['sid']);
+
+$date1 = $data['from_date'] . " 00:00:00";
+$date2 = $data['to_date'] . " 23:59:59";
+
+$transids = $data['selected'];
+
+$incomes = App\Models\Transaction::whereIn('id', $transids)->get();
+
+
+
+
 
 @endphp
 
@@ -103,7 +117,7 @@ table{
 .invoice table td,
 .invoice table th {
     padding: 15px;
-    background: #eee;
+
     border-bottom: 1px solid #fff
 }
 
@@ -193,6 +207,12 @@ table{
 
 /* every odd td background color */
 
+.invoice table tr:nth-child(odd) td {
+    background-color: #f7f7ff;
+}
+.invoice table tr:nth-child(odd) th {
+    background-color: #eee;
+}
 
 
 
@@ -223,9 +243,9 @@ table{
                                 </div>
                                 <div class="col company-details">
                                 <h2 class="name">
-                                        <a target="_blank" href="javascript:;">
-								    البارون
-									</a>
+                                       
+								    فندق البارون
+								
                                     </h2>
                                     <div> الموصل شارع الكورنيش قرب معاونية الأسمنت</div>
                                     <div>0775 588 8355</div>
@@ -236,122 +256,111 @@ table{
                         <main>
                             <div class="row contacts">
                                 <div class="col invoice-to">
-                                    <div class="text-gray-light">الأسم</div>
-                                    <h2 class="to">
-                                        {{$booking->guests->first()->name}}
-                                    </h2>
+                                    <div class="text-gray-light">تقرير الفندق</div>
+                                    <h5 class="to">
+                                        من تاريخ : {{$data['from_date']}}
+                                        | الى تاريخ : {{$data['to_date']}}
+                                    </h5>
                                     
                                     
                                     
                                 </div>
                                 <div class="col invoice-details">
-                                    <h1 class="invoice-id">المبلغ المستلم : 
-                                        @money($booking->paid)    
-                                    </h1>
-                                    <div class="date"> تم عمل اخراج في  : {{date("Y-m-d")}}</div>
+                                    
+                                    <div class="date"> تمت الطباعة في   : {{date("Y-m-d")}}</div>
                                     
                                 </div>
                             </div>
 
                             <hr>
 
-                            <table>
+                            <h4 dir="rtl" class="text-right">الغرف</h4>
+
+                            <table dir="rtl">
                                 <tr>
-                                    
-                                    
-                                    <th class="no">المبلغ</th>
-                                    <th>عدد الأيام</th>
-                                    <th>تاريخ الخروج</th>
-                                    <th>تاريخ الدخول</th>
+                                        <th>ت</th>
+                                        <th>الغرفة</th>
+                                        <th>التاريخ</th>
+                                        <th>المبلغ</th>
                                 </tr>
+                                @foreach($incomes as $income)
                                 <tr>
                                     
-                                    
-                                    <td class="no">
-                                        @money($booking->price)
-                                    </td>
-                                    <td>
-                                        {{$booking->days}}
-                                    </td>
-                                    <td>
-                                        {{$booking->checkout_date}}
-                                        
-                                    </td>
-                                    <td>
-                                        {{$booking->checkin_date}}
-                                    </td>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$income->booking->room->name}}</td>
+                                    <td>{{$income->created_at->format("Y-m-d")}}</td>
+                                    <td>@money($income->amount)</td>
+                                </tr>
+                                @endforeach
+                                <tr>
+                                    <td colspan="3">الاجمالي</td>
+                                    <td>@money($incomes->sum("amount"))</td>
                                 </tr>
                             </table>
 
                             <hr>
 
-                            @if($booking->servicesitems->count() > 0)
-                            <table class="table table-bordered ">
+                            <h4 dir="rtl" class="text-right">واردات اخرى</h4>
+                            @php
+                            $total = 0;
+                            @endphp
+                            <table dir="rtl">
                                 <tr>
-                                    
-                                    <th>الأجمالي</th>
-                                    
-                                    <th>المبلغ</th>
-                                    <th>العدد</th>
-                                    <th>الخدمة</th>
+                                        <th>ت</th>
+                                        <th>القسم</th>
+                                        <th>الاجمالي</th>
                                 </tr>
-                                @foreach($booking->servicesitems as $item)
+                                @foreach(App\Models\Incomecat::all() as $cat)
+                                @php
+                                    $income = App\Models\Transaction::where('income_cat', $cat->id)->whereBetween('created_at', [$date1, $date2])->sum("amount");
+                                    $total += $income;
+                                @endphp
                                 <tr>
                                     
-                                    <td>
-                                        @money($item['service_price'] * $item['service_quantity'])
-
-                                    </td>
-                                    <td>
-                                        @money($item['service_price'])
-
-                                    </td>
-                                    <td>
-                                        {{$item['service_quantity']}}
-                                    </td>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$cat->name}}</td>
                                     
-                                    <td>{{$item['service']}}</td>
+                                    <td>@money($income)</td>
                                 </tr>
                                 @endforeach
+                                <tr>
+                                    <td colspan="2">الاجمالي</td>
+                                    <td>@money($total)</td>
+                                </tr>
+
                             </table>
-                            @endif
 
                            
-                            <!-- Summery -->
-                         
-                            <table class="">
+                            <h4 dir="rtl" class="text-right">المصاريف</h4>
+
+                            @php
+                            $total = 0;
+                            @endphp
+                            <table dir="rtl">
                                 <tr>
-                                    <th>
-                                        @money($booking->price)
-                                    </th>
-                                    <th>اجمالي المبلغ</th>
+                                        <th>ت</th>
+                                        <th>القسم</th>
+                                        <th>الاجمالي</th>
                                 </tr>
+                                @foreach(App\Models\Expensecategory::all() as $cat)
+                                @php
+                                    $expense = App\Models\Expense::where('category_id', $cat->id)->whereBetween('created_at', [$date1, $date2])->sum("amount");
+                                    $total += $expense;
+                                @endphp
                                 <tr>
-                                    <th>
-                                        @money($booking->services)
-                                    </th>
-                                    <th>اجمالي الخدمات</th>
+                                    
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$cat->name}}</td>
+                                    
+                                    <td>@money($expense)</td>
                                 </tr>
+                                @endforeach
                                 <tr>
-                                    <th>
-                                        @money($booking->netPrice)
-                                    </th>
-                                    <th>المبلغ الكلي</th>
+                                    <td colspan="2">الاجمالي</td>
+                                    <td>@money($total)</td>
                                 </tr>
-                                <tr>
-                                    <th style="color: red;">
-                                        @money($booking->discount)
-                                    </th>
-                                    <th>الخصم</th>
-                                </tr>
-                                <tr>
-                                    <th style="color: green;">
-                                        @money($booking->paid)
-                                    </th>
-                                    <th>الصافي</th>
-                                </tr>
+
                             </table>
-                         
                             
                             
                         </main>

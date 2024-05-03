@@ -38,11 +38,25 @@
             <div class="card-body">
                 
                     <div class="row">
+
+                        @if(auth()->user()->role == "admin" || auth()->user()->role == "محاسب")
+
+                        <div class="col-md-6 p-2">
+                            <label for="">عدد الغرف المسكونة</label>
+                            <input type="text" class="form-control" readonly value="{{$count}}">
+                        </div>
+
+                        <div class="col-md-6 p-2">
+                            <label for="">اجمالي المبلغ</label>
+                            <input type="text" class="form-control" readonly value="@money($totalToday)">
+                        </div>
+                        @endif
+
                         <div class="col-md-4">
                             <h4 style="background: #2c3e50;color:#fff;padding: 5px;text-align: center;">الغرفة جاهزة</h4>
                         </div>
                         <div class="col-md-4">
-                            <h4 style="background: green;color:#fff;padding: 5px;text-align: center;">الغرفة شاغرة</h4>
+                            <h4 style="background: green;color:#fff;padding: 5px;text-align: center;">الغرفة مسكونة</h4>
                         </div>
                         <div class="col-md-4">
                             <h4 style="background: #d35400;color:#fff;padding: 5px;text-align: center;">الغرفة تحت الصيانة</h4>
@@ -52,9 +66,12 @@
                         <hr>
                     </div>
 
+                 
+                  
                     @foreach($rooms as $room)
                     @php
                         $booked = App\Models\Bookednow::where('room_id',$room->id)->first();
+                    
                     @endphp
                     <div class="col-md-2 mt-2">
                        
@@ -69,6 +86,7 @@
                      
                     </div>
                     @endforeach
+                  
                 </div>
 
             </div>

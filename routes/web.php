@@ -31,6 +31,10 @@ Route::get('/report/bookednow', function () {
 })->name("bookednow");
 
 
+Route::get('/report', function () {
+    return view('report.report');
+})->name("report");
+
 Route::get('/dashboard', function () {
     return redirect('admin');
 })->middleware(['auth'])->name('dashboard');

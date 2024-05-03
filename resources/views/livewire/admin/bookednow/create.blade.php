@@ -52,7 +52,7 @@
 
                 <div class="col-md-6 mt-3">
                     <label>سعر الغرفة</label>
-                    <input readonly type="text" class="form-control" value="@money($room->price)">
+                    <input  type="text" class="form-control" wire:model.lazy="room_price">
                 </div>
 
                 @if($nearbook)

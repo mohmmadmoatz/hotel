@@ -16,6 +16,8 @@ class Update extends Component
     public $type;
     public $amount;
     public $date;
+
+    public $incomecat_id;
     
     protected $rules = [
         'details' => 'required',
@@ -29,7 +31,8 @@ class Update extends Component
         $this->details = $this->Transaction->details;
         $this->type = $this->Transaction->type;
         $this->amount = $this->Transaction->amount;
-        $this->date = $this->Transaction->date;        
+        $this->date = $this->Transaction->date; 
+        $this->incomecat_id = $this->Transaction->incomecat_id;       
     }
 
     public function updated($input)
@@ -49,7 +52,8 @@ class Update extends Component
             'details' => $this->details,
             'type' => $this->type,
             'amount' => $this->amount,
-            'date' => $this->date,            
+            'date' => $this->date,
+            'income_cat' => $this->incomecat_id            
         ]);
     }
 

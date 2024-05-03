@@ -64,6 +64,8 @@ class Create extends Component
     public $total_services;
 
 
+    public $room_price;
+
     public $totalPrice;
     public $netPrice;
 
@@ -262,7 +264,8 @@ class Create extends Component
 
 
     function checkout() {
-        $this->create();
+        
+        $this->create(false);
         
         $this->dispatchBrowserEvent('print', ['url' => route('checkout') . "?booking_id=" . $this->booked->booking_id]);
 
@@ -302,6 +305,7 @@ class Create extends Component
     public function mount()
     {
         $this->room = Room::find($this->room_id);
+        $this->room_price = $this->room->price;
         $this->checkin_date = date("Y-m-d");
         $this->checkin_time = date("H:i");
         $this->new_pay_date = date("Y-m-d");
@@ -314,6 +318,7 @@ class Create extends Component
 
 
         $this->booked = Bookednow::where('room_id',$this->room_id)->first();
+       
         if($this->booked){
             $booking = Booking::find($this->booked->booking_id);
             $this->checkin_date = $booking->checkin_date;
@@ -350,7 +355,7 @@ class Create extends Component
         $this->validateOnly($input);
     }
 
-    public function create()
+    public function create($reset=true)
     {
         if($this->getRules())
             $this->validate();
@@ -439,14 +444,19 @@ class Create extends Component
             ]);
         }
 
-       // $this->reset();
+        if($reset){
+            $this->reset();
+            return redirect()->route('admin.bookednow.read');
+        }
+            
+      
     }
 
     function calculateData() {
         $this->calcPaid();
         $this->getTotalServices();
-        $this->totalPrice = $this->room->price * $this->days;
-        $this->netPrice = $this->room->price * $this->days + $this->total_services;
+        $this->totalPrice = $this->room_price * $this->days;
+        $this->netPrice = $this->room_price * $this->days + $this->total_services;
         $this->finalPrice = $this->netPrice -  $this->paid - $this->discount;
     }
 

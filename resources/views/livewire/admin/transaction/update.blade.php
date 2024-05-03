@@ -14,6 +14,18 @@
 
     <div class="card-body">
             <div class="row">
+
+
+            <div class="col-12">
+                <label for="">صنف الوارد</label>
+                <select wire:model="incomecat_id" class="form-control">
+                    <option value="">اختر صنف الوارد</option>
+                    @foreach (App\Models\Incomecat::get() as $incomecat)
+                        <option value="{{ $incomecat->id }}">{{ $incomecat->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
                <div class="col-12">
 
            
