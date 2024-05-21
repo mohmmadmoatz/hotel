@@ -350,6 +350,18 @@ table{
                                     </th>
                                     <th>الصافي</th>
                                 </tr>
+                                <tr>
+
+                                <th>
+                                        {{$booking->guests->count()}}
+</th>
+                                    
+                                    <th>
+                                        عدد النزلاء
+                                    </th>
+        
+
+                                </tr>
                             </table>
                          
                             

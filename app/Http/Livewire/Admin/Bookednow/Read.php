@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin\Bookednow;
 
 use App\Models\Bookednow;
+use App\Models\Customer;
 use App\Models\Room;
 use App\Models\Booking;
 use Illuminate\Database\Eloquent\Builder;
@@ -47,6 +48,8 @@ class Read extends Component
 
         $bookings = Booking::whereIn('id', $books)->get();
 
+        $customers = Customer::whereIn('booking_id', $bookings->pluck('id'))->count();
+
         $totalToday = $bookings->sum('finalPrice');
 
         $count = $bookings->count();
@@ -64,7 +67,8 @@ class Read extends Component
         return view('livewire.admin.bookednow.read', [
             'rooms' => $rooms,
             'totalToday'=>$totalToday,
-            'count'=>$count
+            'count'=>$count,
+            'customers'=>$customers,
         ])->layout('admin::layouts.app', ['title' => "الأستقبال" ]);
     }
 }

@@ -41,12 +41,22 @@
 
                         @if(auth()->user()->role == "admin" || auth()->user()->role == "محاسب")
 
-                        <div class="col-md-6 p-2">
+                        <div class="col-md-3 p-2">
                             <label for="">عدد الغرف المسكونة</label>
                             <input type="text" class="form-control" readonly value="{{$count}}">
                         </div>
 
-                        <div class="col-md-6 p-2">
+                        <div class="col-md-3 p-2">
+                            <label for="">عدد الغرف الجاهزة</label>
+                            <input type="text" class="form-control" readonly value="{{App\Models\Room::count() -  $count}}">
+                        </div>
+
+                        <div class="col-md-3 p-2">
+                            <label for="">عدد النزلاء</label>
+                            <input type="text" class="form-control" readonly value="{{$customers}}">
+                        </div>
+
+                        <div class="col-md-3 p-2">
                             <label for="">اجمالي المبلغ</label>
                             <input type="text" class="form-control" readonly value="@money($totalToday)">
                         </div>
