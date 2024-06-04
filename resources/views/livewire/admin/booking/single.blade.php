@@ -12,6 +12,11 @@
 
         @endif
     </td>
+    <td>
+        @if($booking->guests)
+            {{ $booking->guests[0]->name }}
+        @endif
+    </td>
     
     @if(getCrudConfig('Booking')->delete or getCrudConfig('Booking')->update)
         <td>

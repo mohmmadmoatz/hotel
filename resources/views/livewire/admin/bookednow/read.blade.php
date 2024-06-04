@@ -39,7 +39,7 @@
                 
                     <div class="row">
 
-                        @if(auth()->user()->role == "admin" || auth()->user()->role == "محاسب")
+                       
 
                         <div class="col-md-3 p-2">
                             <label for="">عدد الغرف المسكونة</label>
@@ -55,6 +55,12 @@
                             <label for="">عدد النزلاء</label>
                             <input type="text" class="form-control" readonly value="{{$customers}}">
                         </div>
+
+                        
+                     
+
+                        @if(auth()->user()->role == "admin" || auth()->user()->role == "محاسب")
+
 
                         <div class="col-md-3 p-2">
                             <label for="">اجمالي المبلغ</label>

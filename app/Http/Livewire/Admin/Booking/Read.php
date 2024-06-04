@@ -52,14 +52,21 @@ class Read extends Component
                         });
                     }
                 }
+                $query->orWhereHas('guests', function (Builder $query) {
+                    $query->where('name', 'like', '%' . $this->search . '%');
+                });
             });
         }
+
+       
 
         if($this->sortColumn) {
             $data->orderBy($this->sortColumn, $this->sortType);
         } else {
             $data->latest('id');
         }
+
+
 
         $data = $data->paginate(config('easy_panel.pagination_count', 15));
 

@@ -47,6 +47,7 @@
                             <th scope="col" style='cursor: pointer' wire:click="sort('notes')"> <i class='fa @if($sortType == 'desc' and $sortColumn == 'notes') fa-sort-amount-down ml-2 @elseif($sortType == 'asc' and $sortColumn == 'notes') fa-sort-amount-up ml-2 @endif'></i> {{ __('Notes') }} </th>
                             <th scope="col" style='cursor: pointer' wire:click="sort('paid')"> <i class='fa @if($sortType == 'desc' and $sortColumn == 'paid') fa-sort-amount-down ml-2 @elseif($sortType == 'asc' and $sortColumn == 'paid') fa-sort-amount-up ml-2 @endif'></i> المدفوع </th>
                             <th scope="col" style='cursor: pointer' wire:click="sort('status')"> <i class='fa @if($sortType == 'desc' and $sortColumn == 'status') fa-sort-amount-down ml-2 @elseif($sortType == 'asc' and $sortColumn == 'status') fa-sort-amount-up ml-2 @endif'></i> {{ __('Status') }} </th>
+                            <th>الضيف الرئيسي</th>
                             
                             @if(getCrudConfig('Booking')->delete or getCrudConfig('Booking')->update)
                                 <th scope="col">{{ __('Action') }}</th>
